@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("onkyo-volume-controller")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Control the volume on your onkyo receiver")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("onkyo-volume-controller")]
