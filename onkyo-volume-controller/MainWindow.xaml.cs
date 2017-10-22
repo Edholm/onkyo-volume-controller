@@ -30,33 +30,35 @@ namespace onkyo_volume_controller
         public MainWindow()
         {
             InitializeComponent();
-            var requestNewState = new RestRequest("/state", Method.POST);
-            _restClient.Post(requestNewState);
             RefreshState();
         }
 
         private void RefreshState()
         {
-            var getCurrentState = new RestRequest("/state", Method.GET);
+            var getCurrentState = new RestRequest("/state", Method.POST);
             var response = _restClient.Execute<State>(getCurrentState);
             _lastState = response.Data;
             volumeLabel.Content = _lastState.MasterVolume;
             volumeSlider.Value = _lastState.MasterVolume;
         }
 
-        private void discoverButton_Click(object sender1, RoutedEventArgs rea)
+        private void pwrButton_Click(object sender, RoutedEventArgs e)
         {
+            var toggle = new RestRequest("/power/toggle", Method.POST);
+            _restClient.Post(toggle);
             RefreshState();
         }
 
-        private void pwrButton_Click(object sender, RoutedEventArgs e)
+        private void incVolumeBtn_Click(object sender, RoutedEventArgs e)
         {
-            var request = _lastState.IsPowered
-                ? new RestRequest("/power/on", Method.POST)
-                : new RestRequest("/power/off", Method.POST);
+            var toggle = new RestRequest("/volume/increase", Method.POST);
+            _restClient.Post(toggle);
+        }
 
-            _restClient.Post(request);
-            RefreshState();
+        private void decVolumeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var toggle = new RestRequest("/volume/decrease", Method.POST);
+            _restClient.Post(toggle);
         }
     }
 }
