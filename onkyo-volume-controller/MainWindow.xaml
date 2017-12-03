@@ -13,6 +13,7 @@
         <Button x:Name="pwrButton" Content="On" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top" Width="24" Click="pwrButton_Click"/>
         <Button x:Name="incVolumeBtn" Content="Increase" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Width="51" Click="incVolumeBtn_Click"/>
         <Button x:Name="decVolumeBtn" Content="Decrease" HorizontalAlignment="Left" Margin="66,74,0,0" VerticalAlignment="Top" Width="51" Click="decVolumeBtn_Click"/>
+        <Button x:Name="toggleMute" Content="Mute" HorizontalAlignment="Left" Margin="122,74,0,0" VerticalAlignment="Top" Width="51" Click="muteBtn_Click"/>
 
     </Grid>
 </Window>

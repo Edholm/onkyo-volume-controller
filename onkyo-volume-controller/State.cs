@@ -13,5 +13,10 @@ namespace onkyo_volume_controller
         public Boolean IsPowered { get; set; }
         public String CurrentInput { get; set; }
         public DateTime LastUpdated { get; set; }
+
+        public override string ToString()
+        {
+            return $"{nameof(MasterVolume)}: {MasterVolume}, {nameof(IsMuted)}: {IsMuted}, {nameof(IsPowered)}: {IsPowered}, {nameof(CurrentInput)}: {CurrentInput}, {nameof(LastUpdated)}: {LastUpdated}";
+        }
     }
 }
