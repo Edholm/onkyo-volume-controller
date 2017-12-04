@@ -28,65 +28,43 @@ namespace onkyo_volume_controller
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly IRestClient _restClient = new RestClient("http://luna.edholm.it/eiscp-rest");
-
-        private readonly EventSourceReader _sseClient =
-            new EventSourceReader(new Uri("http://luna.edholm.it/eiscp-rest/state/updates"));
-
-        private State _lastState;
+        private readonly OnkyoController _onkyoController = new OnkyoController();
 
         public MainWindow()
         {
             InitializeComponent();
-            _restClient.UserAgent = "OnkyoVolumeController";
-            _sseClient.MessageReceived += _sseClient_MessageReceived;
-            StartSSETask();
+            PopulateInputSelections();
+            _onkyoController.StateUpdated += OnkyoController_StateUpdated;
         }
 
-        private void StartSSETask()
+        private void PopulateInputSelections()
         {
-            Task.Run(() => { _sseClient.Start(); });
+            _onkyoController.AvailableInputs().ForEach((input => { InputSelectionComboBox.Items.Add(input); }));
         }
 
-        private void _sseClient_MessageReceived(object sender, EventSourceMessageEventArgs e)
-        {
-            var newState = new JavaScriptSerializer().Deserialize<State>(e.Message);
-            RefreshState(newState);
-        }
-
-        private void RefreshState(State state)
+        private void OnkyoController_StateUpdated(object sender, StateUpdateEventArgs e)
         {
             this.Dispatcher.Invoke(() =>
             {
-                _lastState = state;
-                volumeLabel.Content = _lastState.MasterVolume;
-                volumeSlider.Value = _lastState.MasterVolume;
-                inputSelectionLabel.Content = _lastState.CurrentInput;
+                var state = e.UpdatedState;
+                volumeLabel.Content = state.MasterVolume;
+                volumeSlider.Value = state.MasterVolume;
+                InputSelectionComboBox.SelectedValue = e.UpdatedState.CurrentInput;
             });
         }
 
-        private void pwrButton_Click(object sender, RoutedEventArgs e)
-        {
-            var toggle = new RestRequest("/power/toggle", Method.POST);
-            var restResponse = _restClient.Post(toggle);
-        }
+        private void pwrButton_Click(object sender, RoutedEventArgs e) => _onkyoController.TogglePower();
+        private void incVolumeBtn_Click(object sender, RoutedEventArgs e) => _onkyoController.IncreaseVolume();
+        private void decVolumeBtn_Click(object sender, RoutedEventArgs e) => _onkyoController.DecreaseVolume();
+        private void muteBtn_Click(object sender, RoutedEventArgs e) => _onkyoController.MuteVolume();
 
-        private void incVolumeBtn_Click(object sender, RoutedEventArgs e)
+        private void InputSelectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var inc = new RestRequest("/volume/increase", Method.POST);
-            var restResponse = _restClient.Post(inc);
-        }
-
-        private void decVolumeBtn_Click(object sender, RoutedEventArgs e)
-        {
-            var dec = new RestRequest("/volume/decrease", Method.POST);
-            var restResponse = _restClient.Post(dec);
-        }
-
-        private void muteBtn_Click(object sender, RoutedEventArgs e)
-        {
-            var dec = new RestRequest("/volume/toggle-mute", Method.POST);
-            var restResponse = _restClient.Post(dec);
+            var items = e.AddedItems;
+            if (items.Count == 1)
+            {
+                _onkyoController.SwitchInput(items[0].ToString());
+            }
         }
     }
 }
