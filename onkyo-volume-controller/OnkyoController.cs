@@ -70,6 +70,8 @@ namespace onkyo_volume_controller
 
         public void MuteVolume() => Post(OnPath("/volume/toggle-mute"));
 
+        public void SetVolume(int newVolume) => Post(OnPath($"/volume/{newVolume}"));
+
         public List<string> AvailableInputs() => Get<List<string>>(OnPath("/input/available")).Data;
 
         public void SwitchInput(string newInput) => Post(OnPath($"/input/{newInput}"));

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -33,8 +34,8 @@ namespace onkyo_volume_controller
         public MainWindow()
         {
             InitializeComponent();
-            PopulateInputSelections();
             _onkyoController.StateUpdated += OnkyoController_StateUpdated;
+            PopulateInputSelections();
         }
 
         private void PopulateInputSelections()
@@ -47,15 +48,16 @@ namespace onkyo_volume_controller
             this.Dispatcher.Invoke(() =>
             {
                 var state = e.UpdatedState;
-                volumeLabel.Content = state.MasterVolume;
-                volumeSlider.Value = state.MasterVolume;
+                VolumeSlider.Value = state.MasterVolume;
                 InputSelectionComboBox.SelectedValue = e.UpdatedState.CurrentInput;
+
+                MutedImage.Source = state.Muted
+                    ? new BitmapImage(new Uri("Resources/Mute.png", UriKind.Relative))
+                    : new BitmapImage(new Uri("Resources/Speaker.png", UriKind.Relative));
             });
         }
 
-        private void pwrButton_Click(object sender, RoutedEventArgs e) => _onkyoController.TogglePower();
-        private void incVolumeBtn_Click(object sender, RoutedEventArgs e) => _onkyoController.IncreaseVolume();
-        private void decVolumeBtn_Click(object sender, RoutedEventArgs e) => _onkyoController.DecreaseVolume();
+        private void TogglePowerBtn_Click(object sender, RoutedEventArgs e) => _onkyoController.TogglePower();
         private void muteBtn_Click(object sender, RoutedEventArgs e) => _onkyoController.MuteVolume();
 
         private void InputSelectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -65,6 +67,29 @@ namespace onkyo_volume_controller
             {
                 _onkyoController.SwitchInput(items[0].ToString());
             }
+        }
+
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (VolumeLabel == null) return;
+
+            var val = (int) e.NewValue;
+            VolumeLabel.Content = val;
+        }
+
+        private void VolumeSlider_OnDragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            _onkyoController.SetVolume((int) ((Slider) sender).Value);
+        }
+
+        private void VolumeSlider_KeyUp(object sender, KeyEventArgs e)
+        {
+            _onkyoController.SetVolume((int) ((Slider) sender).Value);
+        }
+
+        private void VolumeSlider_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            _onkyoController.SetVolume((int) ((Slider) sender).Value);
         }
     }
 }
