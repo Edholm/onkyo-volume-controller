@@ -36,6 +36,8 @@ namespace onkyo_volume_controller
             InitializeComponent();
             _onkyoController.StateUpdated += OnkyoController_StateUpdated;
             PopulateInputSelections();
+            var popupTrayPosition = TrayIcon.GetPopupTrayPosition();
+            Console.Out.WriteLine(popupTrayPosition.X);
         }
 
         private void PopulateInputSelections()
@@ -90,6 +92,11 @@ namespace onkyo_volume_controller
         private void VolumeSlider_MouseUp(object sender, MouseButtonEventArgs e)
         {
             _onkyoController.SetVolume((int) ((Slider) sender).Value);
+        }
+
+        private void ExitMenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

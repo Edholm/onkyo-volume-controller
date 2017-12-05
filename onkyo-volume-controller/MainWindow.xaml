@@ -4,37 +4,58 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:onkyo_volume_controller"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
-        Title="Onkyo controller" Height="132.142" Width="354.468" ResizeMode="NoResize">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="8*" />
-            <RowDefinition Height="103*" />
-        </Grid.RowDefinitions>
-        <Slider x:Name="VolumeSlider" Margin="35,45.8,36,0" VerticalAlignment="Top" Maximum="100" SmallChange="1"
-                Grid.Row="1" Height="22"
-                Value="40"
-                IsSnapToTickEnabled="True"
-                Thumb.DragCompleted="VolumeSlider_OnDragCompleted"
-                ValueChanged="VolumeSlider_ValueChanged" KeyUp="VolumeSlider_KeyUp" PreviewMouseUp="VolumeSlider_MouseUp" />
-        <Label x:Name="VolumeLabel" Content="100" Margin="0,39.8,0,0"
-               VerticalAlignment="Top" Grid.Row="1" FontSize="16" RenderTransformOrigin="3.973,0.629"
-               HorizontalAlignment="Right" Width="37" />
-        <Button x:Name="TogglePowerBtn" Margin="0,10,9.6,0"
-                VerticalAlignment="Top" Click="TogglePowerBtn_Click" Height="32" Grid.Row="0" Grid.RowSpan="2"
-                HorizontalAlignment="Right" Width="32">
-            <StackPanel>
-                <Image x:Name="StandbyButton" HorizontalAlignment="Left" Height="24"
-                       VerticalAlignment="Top"
-                       Width="24" Source="Resources/Standby.png" />
-            </StackPanel>
-        </Button>
-        <ComboBox x:Name="InputSelectionComboBox" Margin="10,10,47,0" VerticalAlignment="Top" Grid.Row="0"
-                  Grid.RowSpan="2" SelectionChanged="InputSelectionComboBox_SelectionChanged" Height="32" FontSize="18" />
-        <Button x:Name="ToggleMuteBtn" HorizontalAlignment="Left" Margin="10,45.8,0,0"
-                VerticalAlignment="Top" Width="24" Click="muteBtn_Click" Grid.Row="1" Height="24">
-            <Image x:Name="MutedImage" HorizontalAlignment="Left" Height="22"
-                   VerticalAlignment="Top" Source="Resources/Speaker.png" />
-        </Button>
-    </Grid>
+        Title="Onkyo controller" Visibility="Hidden" ShowInTaskbar="False">
+    <Window.Resources>
+        <ContextMenu x:Key="ContextMenu">
+            <MenuItem Header="Exit" Click="ExitMenuItem_OnClick" />
+        </ContextMenu>
+    </Window.Resources>
+    <tb:TaskbarIcon x:Name="TrayIcon"
+                    Visibility="Visible"
+                    IconSource="Resources/receiver.ico"
+                    ContextMenu="{StaticResource ContextMenu}"
+                    PopupActivation="LeftOrDoubleClick" NoLeftClickDelay="True">
+
+        <tb:TaskbarIcon.TrayPopup>
+            <Border Background="White">
+                <Grid MinHeight="90" MinWidth="350">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8*" />
+                        <RowDefinition Height="103*" />
+                    </Grid.RowDefinitions>
+                    <Slider x:Name="VolumeSlider" Margin="35,45.8,36,0" VerticalAlignment="Top" Maximum="100"
+                            SmallChange="1"
+                            Grid.Row="1" Height="22"
+                            Value="40"
+                            IsSnapToTickEnabled="True"
+                            Thumb.DragCompleted="VolumeSlider_OnDragCompleted"
+                            ValueChanged="VolumeSlider_ValueChanged" KeyUp="VolumeSlider_KeyUp"
+                            PreviewMouseUp="VolumeSlider_MouseUp" />
+                    <Label x:Name="VolumeLabel" Content="100" Margin="0,39.8,0,0"
+                           VerticalAlignment="Top" Grid.Row="1" FontSize="16" RenderTransformOrigin="3.973,0.629"
+                           HorizontalAlignment="Right" Width="37" />
+                    <Button x:Name="TogglePowerBtn" Margin="0,10,9.6,0"
+                            VerticalAlignment="Top" Click="TogglePowerBtn_Click" Height="32" Grid.Row="0"
+                            Grid.RowSpan="2"
+                            HorizontalAlignment="Right" Width="32">
+                        <StackPanel>
+                            <Image x:Name="StandbyButton" HorizontalAlignment="Left" Height="24"
+                                   VerticalAlignment="Top"
+                                   Width="24" Source="Resources/Standby.png" />
+                        </StackPanel>
+                    </Button>
+                    <ComboBox x:Name="InputSelectionComboBox" Margin="10,10,47,0" VerticalAlignment="Top" Grid.Row="0"
+                              Grid.RowSpan="2" SelectionChanged="InputSelectionComboBox_SelectionChanged" Height="32"
+                              FontSize="18" />
+                    <Button x:Name="ToggleMuteBtn" HorizontalAlignment="Left" Margin="10,45.8,0,0"
+                            VerticalAlignment="Top" Width="24" Click="muteBtn_Click" Grid.Row="1" Height="24">
+                        <Image x:Name="MutedImage" HorizontalAlignment="Left" Height="22"
+                               VerticalAlignment="Top" Source="Resources/Speaker.png" />
+                    </Button>
+                </Grid>
+            </Border>
+        </tb:TaskbarIcon.TrayPopup>
+    </tb:TaskbarIcon>
 </Window>

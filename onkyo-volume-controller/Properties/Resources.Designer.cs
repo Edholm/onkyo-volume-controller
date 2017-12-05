@@ -81,6 +81,16 @@ namespace onkyo_volume_controller.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon receiver {
+            get {
+                object obj = ResourceManager.GetObject("receiver", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Speaker {
@@ -97,6 +107,16 @@ namespace onkyo_volume_controller.Properties {
             get {
                 object obj = ResourceManager.GetObject("Standby", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon volume_icon {
+            get {
+                object obj = ResourceManager.GetObject("volume_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }
