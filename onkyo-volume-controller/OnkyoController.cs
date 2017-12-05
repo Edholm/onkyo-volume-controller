@@ -38,7 +38,7 @@ namespace onkyo_volume_controller
             OnStateUpdated(new StateUpdateEventArgs(CurrentState));
         }
 
-        private static RestRequest OnPath(string path) => new RestRequest(path);
+        private static RestRequest ToPath(string path) => new RestRequest(path);
 
         private IRestResponse Post(IRestRequest request)
         {
@@ -62,19 +62,19 @@ namespace onkyo_volume_controller
 
         protected virtual void OnStateUpdated(StateUpdateEventArgs e) => StateUpdated?.Invoke(this, e);
 
-        public void TogglePower() => Post(OnPath("/power/toggle"));
+        public void TogglePower() => Post(ToPath("/power/toggle"));
 
-        public void IncreaseVolume() => Post(OnPath("/volume/increase"));
+        public void IncreaseVolume() => Post(ToPath("/volume/increase"));
 
-        public void DecreaseVolume() => Post(OnPath("/volume/decrease"));
+        public void DecreaseVolume() => Post(ToPath("/volume/decrease"));
 
-        public void MuteVolume() => Post(OnPath("/volume/toggle-mute"));
+        public void MuteVolume() => Post(ToPath("/volume/toggle-mute"));
 
-        public void SetVolume(int newVolume) => Post(OnPath($"/volume/{newVolume}"));
+        public void SetVolume(int newVolume) => Post(ToPath($"/volume/{newVolume}"));
 
-        public List<string> AvailableInputs() => Get<List<string>>(OnPath("/input/available")).Data;
+        public List<string> AvailableInputs() => Get<List<string>>(ToPath("/input/available")).Data;
 
-        public void SwitchInput(string newInput) => Post(OnPath($"/input/{newInput}"));
+        public void SwitchInput(string newInput) => Post(ToPath($"/input/{newInput}"));
 
         public State CurrentState { get; private set; }
     }
